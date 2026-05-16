@@ -65,15 +65,19 @@ test.describe('Data-driven tests', () => {
         name: new RegExp(data.app, 'i')
       }).click();
 
-      const card = page.locator('div').filter({
-        hasText: data.task
-      }).first();
+      const column = page.locator('div').filter({
+  hasText: data.column
+}).first();
 
-      await expect(card).toContainText(data.task);
+const card = column.locator('div').filter({
+  hasText: data.task
+}).first();
 
-      for (const tag of data.tags) {
-        await expect(card).toContainText(tag);
-      }
+await expect(card).toContainText(data.task);
+
+for (const tag of data.tags) {
+  await expect(card).toContainText(tag);
+}
 
     });
 
