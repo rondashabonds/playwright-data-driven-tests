@@ -40,47 +40,40 @@ const testCases = [
 ];
 
 test.describe('Data-driven tests', () => {
-
   test.beforeEach(async ({ page }) => {
-
     await page.goto('https://animated-gingersnap-8cf7f2.netlify.app/');
 
     await page.locator('input[type="text"]').fill('admin');
-
     await page.locator('input[type="password"]').fill('password123');
-
     await page.locator('button').click();
 
     await expect(
       page.getByRole('button', { name: /Web Application/i })
     ).toBeVisible();
-
   });
 
   for (const data of testCases) {
-
     test(`Verify ${data.task}`, async ({ page }) => {
-
       await page.getByRole('button', {
-        name: new RegExp(data.app, 'i')
+        name: new RegExp(data.app, 'i'),
       }).click();
 
       const column = page.locator('div').filter({
-  hasText: data.column
-}).first();
+        hasText: data.column,
+      }).first();
 
-const card = column.locator('div').filter({
-  hasText: data.task
-}).first();
+      await expect(column).toBeVisible();
 
-await expect(card).toContainText(data.task);
+      const card = column.locator('div').filter({
+        hasText: data.task,
+      }).first();
 
-for (const tag of data.tags) {
-  await expect(card).toContainText(tag);
-}
+      await expect(card).toBeVisible();
+      await expect(card).toContainText(data.task);
 
+      for (const tag of data.tags) {
+        await expect(card).toContainText(tag);
+      }
     });
-
   }
-
 });
